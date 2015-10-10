@@ -30,10 +30,16 @@ module Nancy
       verb           = @request.request_method
       requested_path = @request.path_info
 
-      # Grab the handler block from @routes
-      handler = @routes[verb][requested_path]
+      # Grab the handler block from @routes if it exists
+      handler = @routes.fetch(verb, {}).fetch(requested_path, nil)
 
-      handler.call
+      if handler
+        handler.call
+      else
+        # Return a 404 with a custom error message
+        # instead of the default Internal Server Error
+        [404, {}, ["Oops! No routes for #{verb} #{requested_path}"]]
+      end
     end
 
     private
