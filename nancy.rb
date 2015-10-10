@@ -54,7 +54,16 @@ module Nancy
       if handler
         # Evaluate our route handler block in the context of that instance,
         # to give it access to all of the methods (Compare: handler.call)
-        instance_eval(&handler)
+        result = instance_eval(&handler)
+
+        if result.class == String
+          # For convenience, if a handler returns a string,
+          # assume that it is a successful response.
+          [200, {}, [result]]
+        else
+          # Otherwise, return the result of the block as-is.
+          result
+        end
       else
         # Return a 404 with a custom error message
         # instead of the default Internal Server Error
@@ -70,7 +79,6 @@ module Nancy
         @routes[verb] ||= {}
         @routes[verb][path] = handler
       end
-
 
       def params
          # The Rack::Request class that wraps the env has a method called params
@@ -96,6 +104,15 @@ nancy = Nancy::Base.new
 # Add a GET request route
 nancy.get "/hello" do
   [200, {}, ["Hello world"]]
+end
+
+# Add a GET request route with a string content
+nancy.get "/string" do
+  <<-EOS.gsub(/^\s*/, "")  # Strip leading whitespace from each line of the string
+    <h1>This is a string directly passed in to the block</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, veritatis deserunt veniam optio minus natus quisquam, iusto dolor repellendus. Officia exercitationem vel, nisi mollitia eos maxime et est aspernatur quaerat!</p>
+    <script>alert('Awesome!!!');</script>
+  EOS
 end
 
 # Add the root route that displays params
