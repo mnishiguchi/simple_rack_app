@@ -39,4 +39,5 @@ get "/string" do
 end
 ```
 
-
+## CSS Web Safe Font Combinations
+- [Commonly Used Font Combinations](http://www.w3schools.com/cssref/css_websafe_fonts.asp)

@@ -11,6 +11,7 @@ require "awesome_print"
 # Block handlers must return something that Rack can understand.
 
 module Nancy
+
   class Base
 
     def initialize
@@ -87,6 +88,25 @@ module Nancy
         @request.params
       end
   end
+
+  # an instance of Nancy::Base that we can reference
+  Application = Base.new
+
+  # Make an instance of Nancy::Base class be accessble from anywhere
+  module Delegator
+
+    def self.delegate(*methods, to:)
+      Array(methods).each do |method_name|
+        define_method(method_name) do |*args, &block|
+          to.send(method_name, *args, &block)
+        end
+
+        private method_name
+      end
+    end
+
+    delegate :get, :patch, :put, :post, :delete, :head, to: Application
+  end
 end
 
 #==> TEST
@@ -98,35 +118,54 @@ end
 # 5. $ curl --data "body is hello" localhost:9292/       => POST route
 # 6. Hit Ctrl-c to quit
 
-# Instantiate the Nancy::Base class
-nancy = Nancy::Base.new
+# a reference to a Nancy::Base object
+app = Nancy::Application
+
+include Nancy::Delegator
+
 
 # Add a GET request route
-nancy.get "/hello" do
+get "/hello" do
   [200, {}, ["Hello world"]]
 end
 
 # Add a GET request route with a string content
-nancy.get "/string" do
+get "/string" do
   <<-EOS.gsub(/^\s*/, "")  # Strip leading whitespace from each line of the string
-    <h1>This is a string directly passed in to the block</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, veritatis deserunt veniam optio minus natus quisquam, iusto dolor repellendus. Officia exercitationem vel, nisi mollitia eos maxime et est aspernatur quaerat!</p>
-    <script>alert('Awesome!!!');</script>
+    <html>
+      <head>
+        <style>
+          body {
+            background: #CDE;
+          }
+          h1 {
+            color: #0000FF;
+            font-family: "Arial Black", Gadget, sans-serif;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>This is a string directly passed in to the block</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, veritatis deserunt veniam optio minus natus quisquam, iusto dolor repellendus. Officia exercitationem vel, nisi mollitia eos maxime et est aspernatur quaerat!</p>
+
+        <script>alert('Awesome!!!');</script>
+      </body>
+    </html>
   EOS
 end
 
 # Add the root route that displays params
-nancy.get "/" do
+get "/" do
   [200, {}, ["Your params are #{params}"]]
 end
 
 # Add a POST request route
-nancy.post "/" do
+post "/" do
   [200, {}, request.body]
 end
 
 # Print all the routes
-ap nancy.routes
+ap app.routes
 
-# Run the app using the server WEBrick that is built in to Ruby.
-Rack::Handler::WEBrick.run nancy, Port: 9292
+# Run the app using the server WEBrick that is built in to Ruby
+Rack::Handler::WEBrick.run app, Port: 9292
