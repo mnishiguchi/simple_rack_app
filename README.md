@@ -16,6 +16,14 @@
 ## cURL
 - http://curl.haxx.se/docs/httpscripting.html
 
+## rackup
+- https://github.com/rack/rack/wiki/(tutorial)-rackup-howto
+
+## CSS Web Safe Font Combinations
+- [Commonly Used Font Combinations](http://www.w3schools.com/cssref/css_websafe_fonts.asp)
+
+==
+
 ## Some Ruby techniques
 ### Hash#fetch
 - [Hash#fetch vs.Hash#[]](http://stackoverflow.com/questions/16569409/fetch-vs-when-working-with-hashes)
@@ -39,5 +47,5 @@ get "/string" do
 end
 ```
 
-## CSS Web Safe Font Combinations
-- [Commonly Used Font Combinations](http://www.w3schools.com/cssref/css_websafe_fonts.asp)
+### Delegator mixin
+- https://github.com/sinatra/sinatra/blob/1d48ab2929614c679a4ed6cb827131ab10f1af05/lib/sinatra/base.rb#L1973-L1997
