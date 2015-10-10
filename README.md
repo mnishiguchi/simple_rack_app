@@ -13,6 +13,9 @@
 - Enable us to quickly create web applications in Ruby 
 - [source](https://github.com/sinatra/sinatra/blob/master/lib/sinatra/base.rb)
 
+## cURL
+- http://curl.haxx.se/docs/httpscripting.html
+
 ## Some Ruby techniques
 ### Hash#fetch
 -[Hash#fetch vs.Hash#[]](http://stackoverflow.com/questions/16569409/fetch-vs-when-working-with-hashes)

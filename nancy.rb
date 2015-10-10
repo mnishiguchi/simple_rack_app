@@ -17,10 +17,28 @@ module Nancy
       @routes = {}
     end
 
+    # Getter methods to access instance variables
     attr_reader :routes
+    attr_reader :request
 
     def get(path, &handler)
       route("GET", path, &handler)
+    end
+
+    def post(path, &handler)
+      route("POST", path, &handler)
+    end
+
+    def put(path, &handler)
+      route("PUT", path, &handler)
+    end
+
+    def patch(path, &handler)
+      route("PATCH", path, &handler)
+    end
+
+    def delete(path, &handler)
+      route("DELETE", path, &handler)
     end
 
     # To make Nancy::Base a Rack app
@@ -66,10 +84,11 @@ end
 #==> TEST
 
 # 1. Run `ruby nancy.rb`
-# 2. Visit http://localhost:9292/hello                  => existent
-# 3. Visit http://localhost:9292/hola                   => non-existent
-# 4. Visit http://localhost:9292/?foo=bar&hello=goodbye => show params
-# 5. Hit Ctrl-c to quit
+# 2. Visit http://localhost:9292/hello                   => existent GET route
+# 3. Visit http://localhost:9292/hola                    => non-existent GET route
+# 4. Visit http://localhost:9292/?foo=bar&hello=goodbye  => show params
+# 5. $ curl --data "body is hello" localhost:9292/       => POST route
+# 6. Hit Ctrl-c to quit
 
 # Instantiate the Nancy::Base class
 nancy = Nancy::Base.new
@@ -82,6 +101,11 @@ end
 # Add the root route that displays params
 nancy.get "/" do
   [200, {}, ["Your params are #{params}"]]
+end
+
+# Add a POST request route
+nancy.post "/" do
+  [200, {}, request.body]
 end
 
 # Print all the routes
