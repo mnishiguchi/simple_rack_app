@@ -19,9 +19,6 @@
 ## rackup
 - https://github.com/rack/rack/wiki/(tutorial)-rackup-howto
 
-## CSS Web Safe Font Combinations
-- [Commonly Used Font Combinations](http://www.w3schools.com/cssref/css_websafe_fonts.asp)
-
 ==
 
 ## Some Ruby techniques

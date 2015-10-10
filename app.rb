@@ -1,7 +1,5 @@
 require "./nancy"
-
-# Reference to a Nancy::Base object
-app = Nancy::Application
+require "awesome_print"
 
 #==> HOW TO RUN
 
@@ -56,9 +54,9 @@ end
 
 # Print all the routes
 puts "Routes:"
-ap app.routes
+ap Nancy::Application.routes
 
 #==> SERVER
 
 # Run the app using the server WEBrick that is built in to Ruby
-Rack::Handler::WEBrick.run app, Port: 9292
+Rack::Handler::WEBrick.run Nancy::Application, Port: 9292

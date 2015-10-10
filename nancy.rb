@@ -1,5 +1,4 @@
 require "rack"
-require "awesome_print"
 
 # A base Sinatra-like class that other classes can inherit from.
 # https://robots.thoughtbot.com/lets-build-a-sinatra
@@ -111,4 +110,4 @@ end
 
 # To access a Nancy::Base object from anywhere
 include Nancy::Delegator
-ap %Q(Nancy::Delegator's self is #{self.inspect})  #=> self is main
+puts %Q(Nancy::Delegator's self is #{self.inspect})  #=> self is main
