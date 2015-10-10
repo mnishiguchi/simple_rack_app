@@ -34,7 +34,9 @@ module Nancy
       handler = @routes.fetch(verb, {}).fetch(requested_path, nil)
 
       if handler
-        handler.call
+        # Evaluate our route handler block in the context of that instance,
+        # to give it access to all of the methods (Compare: handler.call)
+        instance_eval(&handler)
       else
         # Return a 404 with a custom error message
         # instead of the default Internal Server Error
@@ -50,20 +52,36 @@ module Nancy
         @routes[verb] ||= {}
         @routes[verb][path] = handler
       end
+
+
+      def params
+         # The Rack::Request class that wraps the env has a method called params
+         # that contains information about all parameters provided to the method
+         # (GET, POST, PATCH, etc.)
+        @request.params
+      end
   end
 end
 
 #==> TEST
+
 # 1. Run `ruby nancy.rb`
-# 2. Visit http://localhost:9292/hello
-# 3. Hit Ctrl-c to quit
+# 2. Visit http://localhost:9292/hello                  => existent
+# 3. Visit http://localhost:9292/hola                   => non-existent
+# 4. Visit http://localhost:9292/?foo=bar&hello=goodbye => show params
+# 5. Hit Ctrl-c to quit
 
 # Instantiate the Nancy::Base class
 nancy = Nancy::Base.new
 
 # Add a GET request route
 nancy.get "/hello" do
-  [200, {}, ["Nancy says hello"]]
+  [200, {}, ["Hello world"]]
+end
+
+# Add the root route that displays params
+nancy.get "/" do
+  [200, {}, ["Your params are #{params}"]]
 end
 
 # Print all the routes

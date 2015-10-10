@@ -14,6 +14,12 @@
 - [source](https://github.com/sinatra/sinatra/blob/master/lib/sinatra/base.rb)
 
 ## Some Ruby techniques
-- [Hash#fetch vs.Hash#[]](http://stackoverflow.com/questions/16569409/fetch-vs-when-working-with-hashes)
+### Hash#fetch
+-[Hash#fetch vs.Hash#[]](http://stackoverflow.com/questions/16569409/fetch-vs-when-working-with-hashes)
+
+### BasicObject#instance_eval
+- Evaluates a string containing Ruby source code, or the given block, within the context of the receiver (obj). 
+- [BasicObject#instance_eval](http://ruby-doc.org/core-2.2.0/BasicObject.html#method-i-instance_eval)
+- [Writing a Domain-Specific Language in Ruby](https://robots.thoughtbot.com/writing-a-domain-specific-language-in-ruby)
 
 
